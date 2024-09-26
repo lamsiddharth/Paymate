@@ -19,70 +19,66 @@ import { useState } from "react"
 import { toast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 
-const formSchema = z.object({
-   phoneno: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  password: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
+const addMoneySchema = z.object({
+   amount: z.number(),
+    bank: z.string()
 })
 
-export default function Home() {
+export const AddMoney = () => {
     const router = useRouter()
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
   // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof addMoneySchema>>({
+    resolver: zodResolver(addMoneySchema),
     defaultValues: {
-      phoneno: "",
-      password: ""
+        amount: 0,
+        bank: ""
     },
   })
 
   // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof addMoneySchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    setLoading(true);
-    const res = await signIn('credentials', {
-      redirect: false,
-      phone: values.phoneno,
-      password: values.password,
-    });
+//     setLoading(true);
+//     const res = await signIn('credentials', {
+//       redirect: false,
+//       phone: values.phoneno,
+//       password: values.password,
+//     });
 
-    setLoading(false);
+//     setLoading(false);
+//     router.refresh();
 
-    if (res?.error) {
-      setError('Invalid phone number or password');
-        toast({
-            title: "Invalid Password or Phone Number"
-        })
-    } else {
-      setError('');
-       router.push("/dashboard");
-      toast({
-        title: "Successfully Logged In"
-    })
-    }
+//     if (res?.error) {
+//       setError('not sufficient money in bank');
+//         toast({
+//             title: "Insufficient bank balance"
+//         })
+//     } else {
+//       setError('');
+//       toast({
+//         title: "Successfully Credited"
+//     })
+//     }
 
-    console.log(values)
-  }
+//     console.log(values)
+   }
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen  ">
-        <div className='text-white text-3xl mb-5 underline'>
-          Signin Form
+    <div className="flex flex-col justify-center   ">
+        <div className='text-white text-3xl mb-5 '>
+          Add Money
         </div>
         <Form {...form} >
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 border-white">
         <FormField
           control={form.control}
-          name="phoneno"
+          name="amount"
           render={({ field }) => (
               <FormItem>
-              <FormLabel className='text-white'>Phone Number</FormLabel>
+              <FormLabel className='text-white'>amount</FormLabel>
               <FormControl>
                 <Input placeholder="shadcn" {...field} className='text-white' />
               </FormControl>
@@ -92,10 +88,10 @@ export default function Home() {
           />
         <FormField
           control={form.control}
-          name="password"
+          name="bank"
           render={({ field }) => (
               <FormItem>
-              <FormLabel className='text-white'>Password</FormLabel>
+              <FormLabel className='text-white'>bank</FormLabel>
               <FormControl>
                 <Input placeholder="shadcn" {...field} />
               </FormControl>
@@ -103,7 +99,7 @@ export default function Home() {
             </FormItem>
           )}
           />
-        <Button type="submit">{loading ? 'wait...' : 'Signin'}</Button>
+        <Button type="submit">{loading ? 'wait...' : 'Add Money'}</Button>
 
       </form>
     </Form>

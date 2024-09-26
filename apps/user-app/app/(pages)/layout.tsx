@@ -11,11 +11,12 @@ export default function RootLayout({
           <body className=" bg-black mt-16 pt-3" >
             <Navbarin /> 
             <div className="flex">
-        <div className="w-72 border-r border-slate-300 min-h-screen mr-4 pt-28">
-            <div>
+        <div className="w border-r border-slate-300 min-h-screen mr-4 pt-28">
+            <div className="felx felx-col pt-11 text-xl">
                 <SidebarItem href={"/dashboard"} icon={<HomeIcon />} title="Home" />
                 <SidebarItem href={"/transfer"} icon={<TransferIcon />} title="Transfer" />
                 <SidebarItem href={"/transactions"} icon={<TransactionsIcon />} title="Transactions" />
+                <SidebarItem href={"/P2P"} icon={<TransactionsIcon />} title="P2P" />
             </div>
         </div>
             {children}
