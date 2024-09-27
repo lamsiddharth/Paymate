@@ -19,24 +19,23 @@ import { useState } from "react"
 import { toast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { createOnRampTransaction } from '@/lib/actions/createOnRampTransactions';
-
+import { p2pTransfer } from '@/lib/actions/P2P'
 const addMoneySchema = z.object({
    amount: z.string(),
-    bank: z.string()
+    number: z.string()
 })
 
-export const AddMoney = () => {
+export const SendMoney = () => {
     const router = useRouter()
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [amount, setAmount] = useState('');
-    const provider = "SBI";
+   
   // 1. Define your form.
   const form = useForm<z.infer<typeof addMoneySchema>>({
     resolver: zodResolver(addMoneySchema),
     defaultValues: {
         amount: '',
-        bank: ""
+        number: ''
     },
   })
 
@@ -45,14 +44,15 @@ export const AddMoney = () => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     setLoading(true);
-    const res = await createOnRampTransaction(provider,Number(values.amount));
+    const res = await p2pTransfer( values.number, Number(values.amount));
+    console.log(res);
     setLoading(false);
-    router.refresh(); 
+    router.refresh();
 
     if (res?.error) {
       setError('not sufficient money in bank');
         toast({
-            title: "Insufficient bank balance"
+            title: "error while transferring"
         })
     } else {
       setError('');
@@ -67,7 +67,7 @@ export const AddMoney = () => {
   return (
     <div className="flex flex-col justify-center   ">
         <div className='text-white text-3xl mb-5 '>
-          Add Money
+          Transfer
         </div>
         <Form {...form} >
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 border-white">
@@ -76,9 +76,9 @@ export const AddMoney = () => {
           name="amount"
           render={({ field }) => (
               <FormItem>
-              <FormLabel className='text-white'>amount</FormLabel>
+              <FormLabel className='text-white text-xl'>Amount</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} className='text-white' />
+                <Input placeholder="shadcn" {...field} className='text-white w-80' />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -86,10 +86,10 @@ export const AddMoney = () => {
           />
         <FormField
           control={form.control}
-          name="bank"
+          name="number"
           render={({ field }) => (
               <FormItem>
-              <FormLabel className='text-white'>bank</FormLabel>
+              <FormLabel className='text-white text-xl'>Number</FormLabel>
               <FormControl>
                 <Input placeholder="shadcn" {...field} />
               </FormControl>
@@ -97,7 +97,7 @@ export const AddMoney = () => {
             </FormItem>
           )}
           />
-        <Button type="submit">{loading ? 'wait...' : 'Add Money'}</Button>
+        <Button type="submit">{loading ? 'wait...' : 'Send Money'}</Button>
 
       </form>
     </Form>
