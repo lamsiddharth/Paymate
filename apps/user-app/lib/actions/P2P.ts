@@ -1,4 +1,5 @@
 "use server"
+
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
 import prisma from "@repo/db/client";
@@ -8,7 +9,7 @@ export async function p2pTransfer(to: string, amount: number) {
     const from = session?.user?.id;
     if (!from) {
         return {
-            message: "Error while sending"
+            error: "Error while sending"
         }
     }
     const toUser = await prisma.user.findFirst({
@@ -19,37 +20,37 @@ export async function p2pTransfer(to: string, amount: number) {
 
     if (!toUser) {
         return {
-            message: "User not found"
+            error: "User not found"
         }
     }
-    await prisma.$transaction(async (tx) => {
-        await tx.$queryRaw`SELECT * FROM "Balance" WHERE "userId" = ${Number(from)} FOR UPDATE`;
+    
+    try {
+        await prisma.$transaction(async (tx) => {
+            await tx.$queryRaw`SELECT * FROM "Balance" WHERE "userId" = ${Number(from)} FOR UPDATE`;
 
-
-        try {
             const fromBalance = await tx.balance.findUnique({
                 where: { userId: Number(from) },
-              });
-              if (!fromBalance || fromBalance.amount < amount) {
+            });
+            if (!fromBalance || fromBalance.amount < amount) {
                 throw new Error('Insufficient funds');
-              }
-    
-              await tx.balance.update({
+            }
+
+            await tx.balance.update({
                 where: { userId: Number(from) },
                 data: { amount: { decrement: amount } },
-              });
-    
-              await tx.balance.update({
+            });
+
+            await tx.balance.update({
                 where: { userId: toUser.id },
                 data: { amount: { increment: amount } },
-              });
-            return ({
-                message: "Payment successfull"
-            })
-        } catch (error) {
-            return ({
-                error: "payment unsuccessfull"
-            })
-        }
-    });
+            });
+        });
+        return {
+            message: "Payment successful"
+        };
+    } catch (error) {
+        return {
+            error:  "Payment unsuccessful"
+        };
+    }
 }
