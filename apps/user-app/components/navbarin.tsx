@@ -2,7 +2,7 @@
 import { signOut, useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from './ui/button';
+import { Button } from "./ui/button";
 
 const Navbarin: React.FC = () => {
   const { data: session, status } = useSession();
@@ -11,13 +11,13 @@ const Navbarin: React.FC = () => {
   useEffect(() => {
     if (status === "loading") return; // Wait for session loading
     if (!session) {
-      router.push('/'); // Redirect to home if not authenticated
+      router.push("/"); // Redirect to home if not authenticated
     }
   }, [session, status, router]);
 
   const handleLogout = async () => {
     await signOut();
-    router.push('/api/auth/signin'); // Redirect after sign out
+    router.push("/api/auth/signin"); // Redirect after sign out
   };
 
   return (
