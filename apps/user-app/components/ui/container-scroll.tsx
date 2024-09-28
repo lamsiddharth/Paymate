@@ -67,7 +67,6 @@ export const Header = ({ translate, titleComponent }: any) => {
 export const Card = ({
   rotate,
   scale,
-  translate,
 }: {
   rotate: any;
   scale: any;

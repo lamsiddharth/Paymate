@@ -1,5 +1,4 @@
 "use client";
-import { signIn } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -7,18 +6,15 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Card } from "@/components/ui/card";
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { createOnRampTransaction } from "@/lib/actions/createOnRampTransactions";
 import { p2pTransfer } from "@/lib/actions/P2P";
 const addMoneySchema = z.object({
   amount: z.string(),
@@ -53,11 +49,13 @@ export const SendMoney = () => {
       setError("not sufficient money in bank");
       toast({
         title: "error while transferring",
+        description: error
       });
     } else {
       setError("");
       toast({
         title: "Successfully Credited",
+        description: error
       });
     }
 

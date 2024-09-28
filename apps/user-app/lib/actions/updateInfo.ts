@@ -11,13 +11,8 @@ export async function updateInformation(name?: string, email?: string) {
       error: "Error no user found",
     };
   }
-  const user = await prisma.user.findUnique({
-    where: {
-      id: Number(session.user.id),
-    },
-  });
   try {
-    const user = await prisma.user.update({
+    await prisma.user.update({
       where: {
         id: Number(session.user.id),
       },

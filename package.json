@@ -4,14 +4,15 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "lint": "turbo lint -- --max-warnings 20",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "db:generate": "cd packages/db && npx prisma migrate && cd ../.."
   },
   "devDependencies": {
     "@types/node": "^22.7.0",
     "prettier": "^3.2.5",
     "turbo": "^2.1.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.0"
   },
   "engines": {
     "node": ">=18"

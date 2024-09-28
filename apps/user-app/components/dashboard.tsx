@@ -1,5 +1,4 @@
 "use client";
-import { signIn, useSession } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -7,21 +6,16 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Card } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { createOnRampTransaction } from "@/lib/actions/createOnRampTransactions";
-import { p2pTransfer } from "@/lib/actions/P2P";
 import { updateInformation } from "@/lib/actions/updateInfo";
-import { authOptions } from "@/lib/auth";
 const updateInfoSchema = z.object({
   name: z.string(),
   email: z.string(),
@@ -66,11 +60,13 @@ export const UpdateInfo = ({ user }: { user: any }) => {
       setError("error while uploading");
       toast({
         title: "Error While Uploading",
+        description: error
       });
     } else {
       setError("");
       toast({
         title: "Updated successfully",
+        description: error
       });
     }
   }

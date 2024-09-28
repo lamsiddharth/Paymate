@@ -1,5 +1,4 @@
 "use client";
-import { signIn } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -7,14 +6,12 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Card } from "@/components/ui/card";
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
@@ -29,7 +26,6 @@ export const AddMoney = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [amount, setAmount] = useState("");
   const provider = "SBI";
   // 1. Define your form.
   const form = useForm<z.infer<typeof addMoneySchema>>({
@@ -54,11 +50,13 @@ export const AddMoney = () => {
       setError("not sufficient money in bank");
       toast({
         title: "Insufficient bank balance",
+        description: error
       });
     } else {
       setError("");
       toast({
         title: "Successfully Credited",
+        description: error
       });
     }
 
