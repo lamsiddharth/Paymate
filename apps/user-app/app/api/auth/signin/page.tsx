@@ -18,6 +18,7 @@ import { Card } from "@/components/ui/card"
 import { useState } from "react"
 import { toast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import prisma from '@repo/db/client';
 
 const formSchema = z.object({
    phoneno: z.string().min(2, {
@@ -51,7 +52,6 @@ export default function Home() {
       phone: values.phoneno,
       password: values.password,
     });
-
     setLoading(false);
 
     if (res?.error) {

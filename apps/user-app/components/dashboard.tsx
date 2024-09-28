@@ -24,7 +24,7 @@ import {  updateInformation } from '@/lib/actions/updateInfo';
 import { authOptions } from '@/lib/auth';
 const updateInfoSchema = z.object({
     name: z.string(),
-    email: z.string().email("this is not a valid email"),
+    email: z.string(),
     number: z.string()
 })
 

@@ -3,6 +3,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
 import prisma from "@repo/db/client";
+import { number } from "zod";
 
 export async function p2pTransfer(to: string, amount: number) {
     const session = await getServerSession(authOptions);
@@ -44,6 +45,15 @@ export async function p2pTransfer(to: string, amount: number) {
                 where: { userId: toUser.id },
                 data: { amount: { increment: amount } },
             });
+
+            await tx.p2pTransfer.create({
+                data: {
+                    amount: amount,
+                    fromUserId: Number(from),
+                    toUserId: Number(toUser.id),
+                    timestamp: new Date(),
+                }
+            })
         });
         return {
             message: "Payment successful"
