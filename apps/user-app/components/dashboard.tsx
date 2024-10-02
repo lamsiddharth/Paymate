@@ -32,22 +32,12 @@ export const UpdateInfo = ({ user }: { user: any }) => {
     mode: "onChange",
     resolver: zodResolver(updateInfoSchema),
     defaultValues: {
-      name: "", // Start with empty strings
-      email: "",
-      number: undefined,
+      name: user.name, // Start with empty strings
+      email: user.email,
+      number: user.number,
     },
   });
 
-  // 2. Use `reset` to update form values once `user` data is available
-  useEffect(() => {
-    if (user) {
-      form.reset({
-        name: user.name || "", // Provide fallback values
-        email: user.email || "",
-        number: user.number || undefined,
-      });
-    }
-  }, [user]); // The form will reset when `user` changes
 
   // 3. Define a submit handler.
   async function onSubmit(values: z.infer<typeof updateInfoSchema>) {
