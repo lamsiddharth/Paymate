@@ -12,9 +12,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@repo/db": "*",
+    "@repo/db": "../../packages/db",
+    "@repo/ui": "../../packages/ui",
     "@types/express": "^4.17.21",
     "esbuild": "^0.20.2",
-    "express": "^4.19.1"
+    "express": "^4.19.1",
+    "prisma": "^5.11.0"
   }
 }
